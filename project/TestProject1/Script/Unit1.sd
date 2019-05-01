@@ -1,0 +1,108 @@
+﻿function editor_form_script();forward;
+
+const sLineBreak = Chr(13);
+
+function Main();
+begin
+ editor_form_script;
+end;
+
+function editor_form_script();
+var p1,w1,ribbon,text_edit, button,str,memo,parent,child;
+begin
+{1}
+  TestedApps.RunAll;
+  
+  p1 := Aliases.TestEnvironment_TD32_;//Sys.Process('TestEnvironment(TD32)');
+  w1 := p1.VCLObject('FMain');
+{2}  
+  w1.Maximize;
+{3}
+  ribbon := w1.VCLObject('dxRibbon');
+  ribbon.ClickItemXY('dxRibbonTab1|[0]|Форма редакторов', 68, 7);
+{4}
+  memo := Aliases.TestEnvironment_TD32_.FMain.MDIClient.FEdits.sbMain.
+  pMainPanel.mTest.mTestEdit.TcxCustomInnerMemo;
+  memo.Click;
+{5}
+  str := 'aaaa' + 'aaaa';
+  memo.Keys(str);
+{6}
+  Aliases.TestEnvironment_TD32_.FMain.MDIClient.FEdits.sbMain.
+  pButtonsPanel.TcxButton.clickButton;
+{7}
+// многострочный не работает
+  aqObject.CheckProperty(Aliases.TestEnvironment_TD32_.
+  FMain.MDIClient.FEdits.sbMain.pLabelsPanel.
+  FindChild('Index', 7),
+   'Caption', cmpEqual, str );
+{8}
+  str := 'Привет, спортик';
+  Aliases.TestEnvironment_TD32_.FMain.MDIClient.FEdits.sbMain.
+  pMainPanel.edTest.edTestEdit.
+  TcxCustomInnerTextEdit.SetText(str);
+{9}
+  Aliases.TestEnvironment_TD32_.FMain.MDIClient.FEdits.sbMain.
+  pButtonsPanel.TcxButton2.ClickButton;
+{10}
+  aqObject.CheckProperty(Aliases.TestEnvironment_TD32_.
+  FMain.MDIClient.FEdits.sbMain.pLabelsPanel.
+  FindChild('Index', 1),
+   'Caption', cmpEqual, str );
+{11}
+  Aliases.TestEnvironment_TD32_.FMain.MDIClient.FEdits.sbMain.
+  pButtonsPanel.TcxButton3.ClickButton;
+{12}
+  aqObject.CheckProperty(Aliases.TestEnvironment_TD32_.
+  FMain.MDIClient.FEdits.sbMain.pLabelsPanel.
+  FindChild('Index', 14),
+   'Caption', cmpEqual, 'False' );
+{13}
+Aliases.TestEnvironment_TD32_.FMain.MDIClient.FEdits.sbMain.
+pMainPanel.cbTest.cbTestEdit.wState := 1;
+{14}
+  Aliases.TestEnvironment_TD32_.FMain.MDIClient.FEdits.sbMain.
+  pButtonsPanel.TcxButton3.ClickButton;
+{15}
+  aqObject.CheckProperty(Aliases.TestEnvironment_TD32_.
+  FMain.MDIClient.FEdits.sbMain.pLabelsPanel.
+  FindChild('Index', 14),
+   'Caption', cmpEqual, 'True' );
+{16}
+  Aliases.TestEnvironment_TD32_.FMain.MDIClient.FEdits.sbMain.
+  pMainPanel.ccbTest.ccbTestEdit.click;
+{17}
+  Aliases.TestEnvironment_TD32_.TcxCheckComboBoxPopupWindow.
+  TcxEditListBoxContainer.TcxCustomCheckComboBoxListBox.
+  Click(327, 24);
+{18}
+  Aliases.TestEnvironment_TD32_.FMain.MDIClient.FEdits.sbMain.
+  pButtonsPanel.TcxButton5.ClickButton;
+{19}
+  aqObject.CheckProperty(Aliases.TestEnvironment_TD32_.
+  FMain.MDIClient.FEdits.sbMain.pLabelsPanel.
+  FindChild('Index', 14),
+  'Caption', cmpEqual, 'True' );
+{20}
+  str := '123';
+  Aliases.TestEnvironment_TD32_.FMain.MDIClient.FEdits.sbMain.
+  pMainPanel.ceTest.ceTestEdit.TcxCustomInnerTextEdit.
+  SetText(str);
+{21}
+  Aliases.TestEnvironment_TD32_.FMain.MDIClient.FEdits.sbMain.
+  pButtonsPanel.TcxButton4.ClickButton;
+
+{22}
+{Bug in exe here}
+
+  aqObject.CheckProperty(Aliases.TestEnvironment_TD32_.
+  FMain.MDIClient.FEdits.sbMain.pLabelsPanel.
+  FindChild('Index', 11),
+  'Caption', cmpEqual, str );
+
+{23}
+  Aliases.TestEnvironment_TD32_.FMain.MDIClient.FEdits.sbMain.
+  pMainPanel.ccbTest.ccbTestEdit.Click;
+{25}
+   {...}
+end;
